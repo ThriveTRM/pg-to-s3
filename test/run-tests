@@ -30,7 +30,7 @@ if [ -z "$s3_key" ]; then
 fi
 
 echo -e "\n===>> Running s3-to-pg..."
-DATABASE_URL="$DESTINATION_DATABASE_URL" s3-to-pg "$s3_key"
+DATABASE_URL="$DESTINATION_DATABASE_URL" FORCE_DELETE=1 s3-to-pg "$s3_key"
 
 echo -e "\n===>> select * from foos;"
 psql "$DESTINATION_DATABASE_URL" -c 'select * from foos;' | tee s3-to-pg-out.txt

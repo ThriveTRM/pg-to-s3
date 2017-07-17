@@ -19,5 +19,5 @@ if [ -z "$s3_database_backup_url" ]; then
 fi
 
 echo "[$(date)] Starting..."
-pg_dump -Fc "$database_url" | aws s3 cp - "$s3_key"
+pg_dump -Fc --no-owner --no-acl --verbose "$database_url" | aws s3 cp - "$s3_key"
 echo "[$(date)] Upload complete: $s3_key"

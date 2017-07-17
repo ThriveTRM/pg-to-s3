@@ -19,7 +19,7 @@ services:
       - DESTINATION_DATABASE_URL=postgres://postgres@db:5432/destination
 
   db:
-    image: postgres:alpine
+    image: postgres:9.6.3-alpine
     ports:
       - '5432'
 
