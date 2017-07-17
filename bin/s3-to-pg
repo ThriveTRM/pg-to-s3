@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 s3_dump="$1"
 database_url="${2-$DATABASE_URL}"
 
