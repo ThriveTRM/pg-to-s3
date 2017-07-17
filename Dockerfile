@@ -5,4 +5,4 @@ RUN apk --no-cache add python py-pip bash && \
     apk del py-pip
 
 ADD bin/* /usr/local/bin/
-CMD pg-to-s3
+CMD cat
