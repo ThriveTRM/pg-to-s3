@@ -1,0 +1,21 @@
+#!/bin/bash
+
+database_url="${1-$DATABASE_URL}"
+s3_database_backup_url="${2-$S3_DATABASE_BACKUP_URL}"
+
+timestamp=$(date +"%Y.%m.%d_%H.%M%p")
+s3_key="$s3_database_backup_url/$timestamp.dump"
+
+if [ -z "$database_url" ]; then
+  echo "Missing argument: DATABASE_URL"
+  exit 1
+fi
+
+if [ -z "$s3_database_backup_url" ]; then
+  echo "Missing argument: S3_DATABASE_BACKUP_URL"
+  exit 1
+fi
+
+echo "[$(date)] Starting..."
+pg_dump -Fc "$database_url" | aws s3 cp - "$s3_key"
+echo "[$(date)] Upload complete: $s3_key"

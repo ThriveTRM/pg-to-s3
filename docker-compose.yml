@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  test:
+    build: .
+    volumes:
+      - "./test:/test"
+    entrypoint: /test/entrypoint.sh
+    command: run-tests
+    depends_on:
+      - db
+      - fakes3
+    environment:
+      - AWS_ACCESS_KEY_ID=1234
+      - AWS_SECRET_ACCESS_KEY=1234
+      - AWS_REGION=us-east-1
+      - S3_DATABASE_BACKUP_URL=s3://test-bucket
+      - SOURCE_DATABASE_URL=postgres://postgres@db:5432/source
+      - DESTINATION_DATABASE_URL=postgres://postgres@db:5432/destination
+
+  db:
+    image: postgres:alpine
+    ports:
+      - '5432'
+
+  fakes3:
+    image: lphoward/fake-s3
+    volumes:
+      - "./tmp:/fakes3_root"
+    ports:
+      - '4569'

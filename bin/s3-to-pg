@@ -1,0 +1,16 @@
+#!/bin/bash
+
+s3_dump="$1"
+database_url="${2-$DATABASE_URL}"
+
+if [ -z "$s3_dump" ]; then
+  echo "Missing argument: s3 dump file"
+  exit 1
+fi
+
+if [ -z "$database_url" ]; then
+  echo "Missing argument: DATABASE_URL"
+  exit 1
+fi
+
+aws s3 cp "$s3_dump" - | pg_restore --clean --if-exists -d "$database_url"
