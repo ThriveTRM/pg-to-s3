@@ -3,7 +3,7 @@
 set -eo pipefail
 
 s3_dump="$1"
-database_url="${2-$DATABASE_URL}"
+database_url="${2-$POSTGRES_URL}"
 
 if [ -z "$s3_dump" ]; then
   echo "Missing argument: s3 dump file"
@@ -11,7 +11,7 @@ if [ -z "$s3_dump" ]; then
 fi
 
 if [ -z "$database_url" ]; then
-  echo "Missing argument: DATABASE_URL"
+  echo "Missing argument: POSTGRES_URL"
   exit 1
 fi
 
@@ -24,4 +24,4 @@ if [ -z "$FORCE_DELETE" ]; then
   fi
 fi
 
-#aws s3 cp "$s3_dump" - | pg_restore --clean --if-exists -d "$database_url"
+aws s3 cp "$s3_dump" - | pg_restore --verbose --clean --if-exists -d "$database_url"

@@ -15,8 +15,8 @@ services:
       - AWS_SECRET_ACCESS_KEY=1234
       - AWS_REGION=us-east-1
       - S3_DATABASE_BACKUP_URL=s3://test-bucket
-      - SOURCE_DATABASE_URL=postgres://postgres@db:5432/source
-      - DESTINATION_DATABASE_URL=postgres://postgres@db:5432/destination
+      - SOURCE_URL=postgres://postgres@db:5432/source
+      - DESTINATION_URL=postgres://postgres@db:5432/destination
 
   db:
     image: postgres:9.6.3-alpine

@@ -17,10 +17,10 @@ echo -e "\n===>> Making an s3 bucket..."
 aws s3 mb "$S3_DATABASE_BACKUP_URL"
 
 echo -e "\n===>> Loading data to source database..."
-psql "$SOURCE_DATABASE_URL" -f /test/schema.sql
+psql "$SOURCE_URL" -f /test/schema.sql
 
 echo -e "\n===>> Running pg-to-s3..."
-DATABASE_URL="$SOURCE_DATABASE_URL" pg-to-s3 | tee pg-to-s3-out.txt
+POSTGRES_URL="$SOURCE_URL" pg-to-s3 | tee pg-to-s3-out.txt
 
 s3_key=$(grep 'Upload complete:' pg-to-s3-out.txt | sed -e 's/.*Upload complete: //g')
 
@@ -30,10 +30,10 @@ if [ -z "$s3_key" ]; then
 fi
 
 echo -e "\n===>> Running s3-to-pg..."
-DATABASE_URL="$DESTINATION_DATABASE_URL" FORCE_DELETE=1 s3-to-pg "$s3_key"
+POSTGRES_URL="$DESTINATION_URL" FORCE_DELETE=1 s3-to-pg "$s3_key"
 
 echo -e "\n===>> select * from foos;"
-psql "$DESTINATION_DATABASE_URL" -c 'select * from foos;' | tee s3-to-pg-out.txt
+psql "$DESTINATION_URL" -c 'select * from foos;' | tee s3-to-pg-out.txt
 
 if ! grep -q '3 rows' s3-to-pg-out.txt; then
   echo -e "\n===> FAILURE! Expected the output to include '3 rows'."
