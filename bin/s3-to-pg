@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -eo pipefail
 
 s3_dump="$1"
 database_url="${2-$DATABASE_URL}"

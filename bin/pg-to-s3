@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -eo pipefail
 
 database_url="${1-$DATABASE_URL}"
 s3_database_backup_url="${2-$S3_DATABASE_BACKUP_URL}"
