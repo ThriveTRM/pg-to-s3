@@ -4,6 +4,8 @@ set -eo pipefail
 
 database_url="${1-$POSTGRES_URL}"
 s3_database_backup_url="${2-$S3_DATABASE_BACKUP_URL}"
+timestamp=$(date +"%Y.%m.%d_%H.%M%p")
+filename="$s3_database_backup_url/$timestamp.dump"
 
 if [ -z "$database_url" ]; then
   echo "Missing argument: POSTGRES_URL"
@@ -15,9 +17,8 @@ if [ -z "$s3_database_backup_url" ]; then
   exit 1
 fi
 
-timestamp=$(date +"%Y.%m.%d_%H.%M%p")
-filename="$timestamp.dump"
-eval $(s3-set-env "$s3_database_backup_url" "$filename")
+s3-set-env "$filename"
+eval $(s3-set-env "$filename")
 
 echo "[$(date)] Starting..."
 pg_dump -Fc --no-owner --no-acl --verbose "$database_url" | aws s3 cp - "$S3_OBJECT_KEY"

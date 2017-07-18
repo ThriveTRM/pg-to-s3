@@ -14,7 +14,7 @@ echo -e "\n===>> Creating destination database..."
 reset-db destination
 
 echo -e "\n===>> Making an s3 bucket..."
-aws s3 mb "$S3_DATABASE_BACKUP_URL"
+AWS_ACCESS_KEY_ID=1234 AWS_SECRET_ACCESS_KEY=1234 aws s3 mb s3://test-bucket
 
 echo -e "\n===>> Loading data to source database..."
 psql "$SOURCE_URL" -f /test/schema.sql

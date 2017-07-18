@@ -7,25 +7,25 @@ import sys
 import re
 from urlparse import urlparse
 
-if len(sys.argv) < 2:
-    print("Missing argument: URI")
+if len(sys.argv) != 2:
+    print('Missing argument: URI')
     sys.exit(1)
 
-url      = "/".join(sys.argv[1:])
+url      = sys.argv[1]
 unsigned = re.compile('^s3://(.+?)/(.+)$')
 signed   = re.compile('^s3://(.+):(.+)@(.+?)/(.+)$')
 
 if signed.match(url):
     access_id, secret, bucket, key = signed.findall(url)[0]
-    print("export AWS_ACCESS_KEY_ID={}".format(access_id))
-    print("export AWS_SECRET_ACCESS_KEY={}".format(secret))
-    print("export S3_OBJECT_KEY=s3://{}/{}".format(bucket, key))
-    print("export S3_SIGNED_OBJECT_KEY=s3://{}:{}@{}/{}".format(access_id, secret, bucket, key))
+    print('export AWS_ACCESS_KEY_ID={}'.format(access_id))
+    print('export AWS_SECRET_ACCESS_KEY={}'.format(secret))
+    print('export S3_OBJECT_KEY=s3://{}/{}'.format(bucket, key))
+    print('export S3_SIGNED_OBJECT_KEY=s3://{}:{}@{}/{}'.format(access_id, secret, bucket, key))
 elif unsigned.match(url):
     bucket, key = unsigned.findall(url)[0]
-    print("export S3_OBJECT_KEY=s3://{}/{}".format(bucket, key))
-    print("export S3_SIGNED_OBJECT_KEY=s3://{}/{}".format(bucket, key))
+    print('export S3_OBJECT_KEY=s3://{}/{}'.format(bucket, key))
+    print('export S3_SIGNED_OBJECT_KEY=s3://{}/{}'.format(bucket, key))
 else:
-    print("Invalid S3 URL.")
+    print('Invalid S3 URL.')
     sys.exit(1)
 

@@ -5,17 +5,13 @@ build:
 	docker-compose build
 
 test: build
-	docker-compose run test
+	docker-compose run test_signed
+	docker-compose run test_unsigned
 
 release:
-	echo "-----> Building $(IMAGE)..."
 	docker build --no-cache -t "$(IMAGE)" .
-
-	echo "-----> Tagging $(IMAGE)..."
 	docker tag "$(IMAGE)" "$(IMAGE):$(TAG)"
 	docker tag "$(IMAGE)" "$(IMAGE):latest"
-
-	echo "-----> Pushing $(IMAGE)..."
 	docker push "$(IMAGE):latest"
 	docker push "$(IMAGE):$(TAG)"
 
