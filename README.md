@@ -1,3 +1,5 @@
 # PG to S3
 
-To run tests, run `docker-compose build && docker-compose run test`.
+To run tests, run `make test`
+
+To release, run `make release`
