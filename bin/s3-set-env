@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+
+# Normalizes an S3 URI in the format of:
+#   s3://aws_access_key_id:aws_secret_key@bucket_name
+
+import sys
+from urlparse import urlparse
+
+if len(sys.argv) < 2:
+    print("Missing argument: URI")
+    sys.exit(1)
+
+uri = urlparse("/".join(sys.argv[1:]))
+
+if uri.username and uri.password:
+    print("export AWS_ACCESS_KEY_ID={0.username}".format(uri))
+    print("export AWS_SECRET_ACCESS_KEY={0.password}".format(uri))
+    print("export S3_SIGNED_OBJECT_KEY=s3://{0.username}:{0.password}@{0.hostname}{0.path}".format(uri))
+else:
+    print("export S3_SIGNED_OBJECT_KEY=s3://{0.hostname}{0.path}".format(uri))
+
+print("export S3_OBJECT_KEY=s3://{0.hostname}{0.path}".format(uri))

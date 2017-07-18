@@ -24,4 +24,6 @@ if [ -z "$FORCE_DELETE" ]; then
   fi
 fi
 
-aws s3 cp "$s3_dump" - | pg_restore --verbose --clean --if-exists -d "$database_url"
+eval $(s3-set-env "$s3_dump")
+
+aws s3 cp "$S3_OBJECT_KEY" - | pg_restore --verbose --clean --if-exists -d "$database_url"
